@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@yield('title', 'Attendance Register')</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#F7F4EC',
+                        forest: '#1E3D32',
+                        'forest-deep': '#14291F',
+                        gold: '#E8C56A',
+                        ink: '#2B3A67',
+                        'ink-soft': '#6B7594',
+                        present: '#4C7A5D',
+                        absent: '#B33A3A',
+                    },
+                    fontFamily: {
+                        display: ['"Special Elite"', 'monospace'],
+                        sans: ['"Noto Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: 'Noto Sans', sans-serif; overflow-x: hidden; }
+        button, a, input, select { -webkit-tap-highlight-color: transparent; }
+        button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+            outline: 3px solid rgba(232, 197, 106, 0.75); outline-offset: 2px;
+        }
+        .nav-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+            padding: 7px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;
+            background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.18);
+            color: white; text-decoration: none; white-space: nowrap; transition: all 0.15s ease;
+        }
+        .nav-btn:hover { background: rgba(232,197,106,0.30); border-color: rgba(232,197,106,0.55); }
+        .nav-btn-danger { background: rgba(179,58,58,0.20); border-color: rgba(179,58,58,0.40); }
+        .nav-btn-danger:hover { background: rgba(179,58,58,0.45); }
+        @media (max-width: 640px) {
+            .nav-btn { padding: 6px 10px; font-size: 11px; gap: 4px; }
+            .nav-btn svg { width: 14px; height: 14px; }
+        }
+        @media (max-width: 450px) {
+            body { font-size: 14px; }
+            main { padding-left: 12px; padding-right: 12px; }
+            .nav-btn { padding: 6px 8px; font-size: 10px; gap: 3px; }
+            .nav-btn svg { width: 12px; height: 12px; }
+        }
+    </style>
+
+    @stack('styles')
+</head>
+
+<body class="bg-paper min-h-screen text-ink">
+
+    <header class="bg-forest text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-3 sm:px-5">
+            <div class="flex items-center justify-between gap-2 sm:gap-4 min-h-[64px] py-2">
+
+                <div class="flex-shrink-0 flex flex-col justify-center">
+                    <div class="font-display text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.15em] uppercase text-gold mb-0.5">
+                        Attendance Register
+                    </div>
+                    <h1 class="text-xs sm:text-sm md:text-base font-bold whitespace-nowrap leading-none">
+                        @yield('header_title')
+                    </h1>
+                    @yield('header_meta')
+                </div>
+
+                <div class="flex-1 min-w-0 flex items-center justify-center gap-2 px-1 sm:px-2">
+                    <img src="/images/logo.jpeg" alt="School Logo" class="h-8 sm:h-10 w-8 sm:w-10 rounded-full flex-shrink-0 object-cover">
+                    <div class="font-extrabold text-[13px] sm:text-base md:text-lg lg:text-xl tracking-wider drop-shadow-md truncate">
+                        {{ config('school.full_name') }}
+                    </div>
+                </div>
+
+                <nav class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                    @hasSection('header_links')
+                        @yield('header_links')
+                    @else
+                        <a href="{{ route('dashboard') }}" class="nav-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="w-3.5 h-3.5 sm:w-4 sm:h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z" />
+                            </svg>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="{{ route('change-password.show') }}" class="nav-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="w-3.5 h-3.5 sm:w-4 sm:h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                            </svg>
+                            <span>Password</span>
+                        </a>
+                        <form method="post" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="nav-btn nav-btn-danger">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="w-3.5 h-3.5 sm:w-4 sm:h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                                <span>Log Out</span>
+                            </button>
+                        </form>
+                    @endif
+                </nav>
+
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-5 sm:py-6">
+        @yield('content')
+    </main>
+
+</body>
+</html>
