@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/attendance', [AttendanceController::class, 'show'])->name('attendance.show');
     Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+    Route::get('/absent-report', [AttendanceController::class, 'absentReport'])->name('absent-report');
     Route::get('/attendance-export-month', [HistoryController::class, 'exportAttendanceMonth'])->name('history.export-attendance-month');
 
     Route::get('/history', [HistoryController::class, 'classHistory'])->name('class-history');
