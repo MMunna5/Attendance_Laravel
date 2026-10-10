@@ -94,6 +94,7 @@
             ['teacher-attendance-history', 'Teacher Attendance History', 'Monthly present/absent summary & Excel download'],
             ['students.upload', 'Upload Excel', 'Bulk import students from Excel file'],
             ['sms-status.index', 'SMS Status', 'See failed/pending absence SMS and retry them'],
+            ['emergency-sms.index', 'Emergency SMS / Notice', 'Send an urgent notice to all classes or selected students'],
         ];
     @endphp
     @foreach($links as [$route, $title, $desc])
