@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmergencySmsController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\SmsStatusController;
 use App\Http\Controllers\StudentController;
@@ -64,5 +65,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/attendance/{student}/correct', [HistoryController::class, 'correctAttendance'])->name('history.correct-attendance');
 
         Route::match(['get', 'post'], '/sms-status', [SmsStatusController::class, 'index'])->name('sms-status.index');
+        Route::match(['get', 'post'], '/emergency-sms', [EmergencySmsController::class, 'index'])->name('emergency-sms.index');
     });
 });
