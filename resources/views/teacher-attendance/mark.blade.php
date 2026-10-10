@@ -12,7 +12,7 @@
 </div>
 @endif
 
-@foreach([['full', 'Full-time', $fullTimeRows, $fullAlreadyMarked, $fullPresent, $fullAbsent], ['part', 'Part-time', $partTimeRows, $partAlreadyMarked, $partPresent, $partAbsent]] as [$sectionKey, $label, $rows, $already, $present, $absent])
+@foreach([['full', 'Full-time', $fullTimeRows, $fullAlreadyMarked, $fullPresent, $fullAbsent, 0], ['part', 'Part-time', $partTimeRows, $partAlreadyMarked, $partPresent, $partAbsent, $fullTimeRows->count()]] as [$sectionKey, $label, $rows, $already, $present, $absent, $offset])
 <div class="bg-white border border-gray-200 rounded-xl p-4 mb-5 shadow-sm">
     <div class="flex items-center justify-between mb-3">
         <div class="font-display text-[11px] tracking-widest uppercase text-ink-soft">{{ $label }} Teachers ({{ $rows->count() }})</div>
