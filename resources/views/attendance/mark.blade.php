@@ -19,7 +19,7 @@
             {{ \Carbon\Carbon::parse($today)->format('d F Y') }}@if($currentClass) · Class {{ $currentClass }}@endif
         </div>
     </div>
-    @if(collect($studentRows)->contains('is_marked', true))
+    @if(collect($studentRows)->contains('is_marked', true) || $isAdminUser)
     <div class="flex gap-3">
         <div class="bg-green-50 text-present font-bold px-4 py-2 rounded-xl text-center">
             <div class="text-xl">{{ collect($studentRows)->where('is_marked', true)->where('is_present', true)->count() }}</div>

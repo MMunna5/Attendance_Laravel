@@ -46,6 +46,7 @@ class TeacherController extends Controller
 
         public function store(Request $request)
     {
+        $username = trim($request->input('username', ''));
         $password = trim($request->input('password', ''));
         $name = trim($request->input('name', ''));
         $mobile = SmsService::cleanPhoneForStorage($request->input('mobile', ''));
@@ -53,18 +54,21 @@ class TeacherController extends Controller
             ? $request->input('employment_type') : Teacher::EMPLOYMENT_FULL;
         $assignedClasses = implode(',', array_filter(array_map('trim', (array) $request->input('assigned_classes', []))));
 
-        if (!$mobile) {
-            return back()->withInput()->with('error', 'A valid mobile number is required — it will be used as the login username.');
+        if ($username === '' || $password === '' || $name === '') {
+            return back()->withInput()->with('error', 'Name, login username, and password are required.');
         }
-        if (User::where('username', $mobile)->exists()) {
-            return back()->withInput()->with('error', "A user with mobile number '{$mobile}' already exists.");
+        if (preg_match('/^[\\pL\\pN@.+_-]+$/u', $username) !== 1) {
+            return back()->withInput()->with('error', 'Username may contain letters, numbers, and @ . + - _ only; spaces are not allowed.');
+        }
+        if (User::where('username', $username)->exists()) {
+            return back()->withInput()->with('error', "Username '{$username}' is already taken.");
         }
 
-        DB::transaction(function () use ($mobile, $password, $name, $assignedClasses, $employmentType) {
+        DB::transaction(function () use ($username, $password, $mobile, $name, $assignedClasses, $employmentType) {
             $user = User::create([
-                'username' => $mobile,
+                'username' => $username,
                 'name' => $name,
-                'email' => $mobile . '@placeholder.local',
+                'email' => $username . '@placeholder.local',
                 'password' => Hash::make($password),
             ]);
             Teacher::create([
@@ -99,15 +103,6 @@ class TeacherController extends Controller
             ? $request->input('employment_type') : Teacher::EMPLOYMENT_FULL;
         $mobile = SmsService::cleanPhoneForStorage($request->input('mobile', ''));
 
-        if (!$mobile) {
-            return back()->withInput()->with('error', 'A valid mobile number is required.');
-        }
-
-        $conflict = User::where('username', $mobile)->when($teacher->user_id, fn ($q) => $q->where('id', '!=', $teacher->user_id))->exists();
-        if ($conflict) {
-            return back()->withInput()->with('error', "Another user already has the mobile number '{$mobile}' as their username.");
-        }
-
         $teacher->update([
             'name' => trim($request->input('name', '')),
             'mobile' => $mobile,
@@ -116,11 +111,8 @@ class TeacherController extends Controller
         ]);
 
         $newPassword = trim($request->input('password', ''));
-        if ($teacher->user) {
-            $teacher->user->update(array_filter([
-                'username' => $mobile,
-                'password' => $newPassword ? Hash::make($newPassword) : null,
-            ]));
+        if ($newPassword && $teacher->user) {
+            $teacher->user->update(['password' => Hash::make($newPassword)]);
         }
 
         return redirect()->route('teachers.index');
