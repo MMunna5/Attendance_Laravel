@@ -57,6 +57,9 @@ class TeacherController extends Controller
         if ($username === '' || $password === '' || $name === '') {
             return back()->withInput()->with('error', 'Name, login username, and password are required.');
         }
+        if (preg_match('/^[\\pL\\pN@.+_-]+$/u', $username) !== 1) {
+            return back()->withInput()->with('error', 'Username may contain letters, numbers, and @ . + - _ only; spaces are not allowed.');
+        }
         if (User::where('username', $username)->exists()) {
             return back()->withInput()->with('error', "Username '{$username}' is already taken.");
         }
