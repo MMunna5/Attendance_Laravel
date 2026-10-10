@@ -33,7 +33,7 @@ class EmergencySmsController extends Controller
             $messageText = trim($validated['message']);
 
             if ($messageText === '') {
-                return back()->withErrors(['message' => 'Please write a notice before sending.')->withInput();
+                return back()->withErrors(['message' => 'Please write a notice before sending.'])->withInput();
             }
 
             if ($targetType === 'class') {
