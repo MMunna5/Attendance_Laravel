@@ -31,7 +31,11 @@
         <div class="space-y-2 mb-4">
             @foreach($rows as $row)
             <div class="flex items-center gap-3 border border-gray-100 rounded-lg p-2.5">
-                <div class="flex-1 min-w-0 font-semibold text-forest-deep text-sm">{{ $row['teacher']->name }}</div>
+                <div class="w-10 flex-shrink-0 font-mono text-xs text-ink-soft">ID: {{ $loop->iteration + $offset }}</div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-forest-deep text-sm">{{ $row['teacher']->name }}</div>
+                    <div class="text-xs text-ink-soft">{{ $row['teacher']->mobile ?: 'No phone' }}</div>
+                </div>
                 @if($already)
                     <span class="px-3 py-1.5 rounded-lg text-[11px] font-bold {{ $row['is_present'] ? 'bg-present text-white' : 'bg-absent text-white' }}">
                         {{ $row['is_present'] ? 'Present' : 'Absent' }}
