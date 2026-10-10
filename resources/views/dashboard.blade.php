@@ -47,7 +47,7 @@
     </a>
     @endforeach
 </div>
-<a href="{{ route('absent-report') }}" class="block bg-white border-2 border-absent/20 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-absent transition mb-4">
+<a href="{{ route('class-history', ['date' => now('Asia/Dhaka')->subDay()->toDateString()]) }}" class="block bg-white border-2 border-absent/20 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-absent transition mb-4">
     <h2 class="text-lg font-bold text-absent">Absent Yesterday</h2>
     <p class="text-sm text-ink-soft mt-1">Quick list of who was absent on the previous day</p>
 </a>
